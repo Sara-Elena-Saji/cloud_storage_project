@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cloud Storage</title>
+    <title>Cloud Storage</title>
 </head>
-
 <body>
-  <h2>Upload files</h2>
 
-  <form method="POST" enctype="multipart/form-data">
+    <h2>Upload File</h2>
+
+    <form method="POST" enctype="multipart/form-data">
         <input type="file" name="file">
         <button type="submit">Upload</button>
-    </form> 
+    </form>
+
+    <h2>Uploaded Files</h2>
+
+    <ul>
+        {% for file in files %}
+            <li>{{ file }}</li>
+        {% endfor %}
+    </ul>
+
 </body>
 </html>
