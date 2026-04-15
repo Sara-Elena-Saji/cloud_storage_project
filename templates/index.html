@@ -16,7 +16,11 @@
 
     <ul>
         {% for file in files %}
-            <li>{{ file.original_name }}</li>
+            <li>
+                <a href="/download/{{ file.stored_name }}">
+                    {{ file.original_name }}
+                </a>
+            </li>
         {% endfor %}
     </ul>
 

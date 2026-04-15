@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import os
 import uuid
 import json
@@ -36,7 +36,6 @@ def home():
 
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], stored_name))
 
-            # Save metadata
             files_data.append({
                 "original_name": file.filename,
                 "stored_name": stored_name
@@ -45,6 +44,12 @@ def home():
             save_files(files_data)
 
     return render_template("index.html", files=files_data)
+
+
+# 🔥 DOWNLOAD ROUTE
+@app.route("/download/<filename>")
+def download_file(filename):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename, as_attachment=True)
 
 
 if __name__ == "__main__":
