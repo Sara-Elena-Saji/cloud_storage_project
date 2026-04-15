@@ -24,6 +24,10 @@
                 <a href="/delete/{{ file.stored_name }}">
                     Delete
                 </a>
+                |
+                <a href="/share/{{ file.share_token }}">
+                    Share Link
+                </a>
             </li>
         {% endfor %}
     </ul>

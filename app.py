@@ -36,9 +36,13 @@ def home():
 
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], stored_name))
 
+            # 🔥 generate share token
+            share_token = str(uuid.uuid4())
+
             files_data.append({
                 "original_name": file.filename,
-                "stored_name": stored_name
+                "stored_name": stored_name,
+                "share_token": share_token
             })
 
             save_files(files_data)
@@ -51,21 +55,34 @@ def download_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename, as_attachment=True)
 
 
-# 🔥 DELETE ROUTE
 @app.route("/delete/<filename>")
 def delete_file(filename):
     files_data = load_files()
 
-    # remove file from folder
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     if os.path.exists(file_path):
         os.remove(file_path)
 
-    # remove from metadata
     files_data = [f for f in files_data if f["stored_name"] != filename]
     save_files(files_data)
 
     return redirect(url_for("home"))
+
+
+# 🔗 SHARE ROUTE
+@app.route("/share/<token>")
+def share_file(token):
+    files_data = load_files()
+
+    for file in files_data:
+        if file["share_token"] == token:
+            return send_from_directory(
+                app.config["UPLOAD_FOLDER"],
+                file["stored_name"],
+                as_attachment=True
+            )
+
+    return "Invalid or expired link"
 
 
 if __name__ == "__main__":
