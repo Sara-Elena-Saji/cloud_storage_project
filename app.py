@@ -33,20 +33,21 @@ def home():
         if file:
             token = str(uuid.uuid4())
             stored_name = token + "_" + file.filename
-
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], stored_name))
 
-            # 🔥 generate share token
             share_token = str(uuid.uuid4())
 
             files_data.append({
                 "original_name": file.filename,
                 "stored_name": stored_name,
-                "share_token": share_token
+                "share_token": share_token,
+                "pinned": False
             })
 
             save_files(files_data)
 
+    # ⭐ sort pinned first
+    files_data = sorted(files_data, key=lambda x: x.get("pinned", False), reverse=True)
     return render_template("index.html", files=files_data)
 
 
@@ -69,7 +70,6 @@ def delete_file(filename):
     return redirect(url_for("home"))
 
 
-# 🔗 SHARE ROUTE
 @app.route("/share/<token>")
 def share_file(token):
     files_data = load_files()
@@ -83,6 +83,20 @@ def share_file(token):
             )
 
     return "Invalid or expired link"
+
+
+# ⭐ PIN / UNPIN
+@app.route("/pin/<filename>")
+def pin_file(filename):
+    files_data = load_files()
+
+    for file in files_data:
+        if file["stored_name"] == filename:
+            file["pinned"] = not file.get("pinned", False)
+
+    save_files(files_data)
+
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

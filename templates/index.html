@@ -17,16 +17,20 @@
     <ul>
         {% for file in files %}
             <li>
+                {% if file.pinned %}
+                    ⭐
+                {% endif %}
+
                 <a href="/download/{{ file.stored_name }}">
                     {{ file.original_name }}
                 </a>
                 |
-                <a href="/delete/{{ file.stored_name }}">
-                    Delete
-                </a>
+                <a href="/delete/{{ file.stored_name }}">Delete</a>
                 |
-                <a href="/share/{{ file.share_token }}">
-                    Share Link
+                <a href="/share/{{ file.share_token }}">Share</a>
+                |
+                <a href="/pin/{{ file.stored_name }}">
+                    {% if file.pinned %}Unpin{% else %}Pin{% endif %}
                 </a>
             </li>
         {% endfor %}
