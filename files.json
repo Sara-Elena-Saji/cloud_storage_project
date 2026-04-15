@@ -1,9 +1,15 @@
-[
-    {
-        "original_name": "fake_women_safety_heatmap_data.csv",
-        "stored_name": "87f2dfd6-ba72-47cb-87a7-278fb1621035_fake_women_safety_heatmap_data.csv",
-        "share_token": "c574f3fc-15d1-4824-860e-ffa62b933a06",
-        "pinned": false,
-        "folder": "default"
-    }
-]
+{
+    "files": [
+        {
+            "original_name": "fake_women_safety_heatmap_data.csv",
+            "stored_name": "e77a262a-5f9f-4af6-84a6-d5e1a5d9a469_fake_women_safety_heatmap_data.csv",
+            "share_token": "08a3a85b-ea15-4497-91c9-902b592563cd",
+            "pinned": false,
+            "folder": "geggeg"
+        }
+    ],
+    "folders": [
+        "default",
+        "geggeg"
+    ]
+}

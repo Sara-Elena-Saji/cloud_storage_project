@@ -13,7 +13,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 def load_files():
     if not os.path.exists(DATA_FILE):
-        return []
+        return {"files": [], "folders": ["default"]}
     with open(DATA_FILE, "r") as f:
         return json.load(f)
 
@@ -25,7 +25,9 @@ def save_files(data):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    files_data = load_files()
+    data = load_files()
+    files_data = data["files"]
+    folders = data["folders"]
 
     if request.method == "POST":
         file = request.files["file"]
@@ -46,12 +48,11 @@ def home():
                 "folder": folder
             })
 
-            save_files(files_data)
+            save_files(data)
 
-    # ⭐ sort pinned first
     files_data = sorted(files_data, key=lambda x: x.get("pinned", False), reverse=True)
 
-    return render_template("index.html", files=files_data)
+    return render_template("index.html", files=files_data, folders=folders)
 
 
 @app.route("/download/<filename>")
@@ -61,23 +62,24 @@ def download_file(filename):
 
 @app.route("/delete/<filename>")
 def delete_file(filename):
-    files_data = load_files()
+    data = load_files()
+    files_data = data["files"]
 
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     if os.path.exists(file_path):
         os.remove(file_path)
 
-    files_data = [f for f in files_data if f["stored_name"] != filename]
-    save_files(files_data)
+    data["files"] = [f for f in files_data if f["stored_name"] != filename]
+    save_files(data)
 
     return redirect(url_for("home"))
 
 
 @app.route("/share/<token>")
 def share_file(token):
-    files_data = load_files()
+    data = load_files()
 
-    for file in files_data:
+    for file in data["files"]:
         if file["share_token"] == token:
             return send_from_directory(
                 app.config["UPLOAD_FOLDER"],
@@ -92,21 +94,24 @@ def share_file(token):
 def create_folder():
     folder_name = request.form.get("folder_name")
 
-    if folder_name:
-        pass  # will improve later
+    data = load_files()
+
+    if folder_name and folder_name not in data["folders"]:
+        data["folders"].append(folder_name)
+        save_files(data)
 
     return redirect(url_for("home"))
 
 
 @app.route("/pin/<filename>")
 def pin_file(filename):
-    files_data = load_files()
+    data = load_files()
 
-    for file in files_data:
+    for file in data["files"]:
         if file["stored_name"] == filename:
             file["pinned"] = not file.get("pinned", False)
 
-    save_files(files_data)
+    save_files(data)
 
     return redirect(url_for("home"))
 
