@@ -5,10 +5,22 @@
 </head>
 <body>
 
+    <h2>Create Folder</h2>
+
+    <form method="POST" action="/create_folder">
+        <input type="text" name="folder_name" placeholder="Folder name">
+        <button type="submit">Create</button>
+    </form>
+
     <h2>Upload File</h2>
 
     <form method="POST" enctype="multipart/form-data">
         <input type="file" name="file">
+
+        <select name="folder">
+            <option value="default">Default</option>
+        </select>
+
         <button type="submit">Upload</button>
     </form>
 
@@ -17,6 +29,8 @@
     <ul>
         {% for file in files %}
             <li>
+                [{{ file.folder }}]
+
                 {% if file.pinned %}
                     ⭐
                 {% endif %}

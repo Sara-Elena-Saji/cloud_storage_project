@@ -29,6 +29,7 @@ def home():
 
     if request.method == "POST":
         file = request.files["file"]
+        folder = request.form.get("folder", "default")
 
         if file:
             token = str(uuid.uuid4())
@@ -41,13 +42,15 @@ def home():
                 "original_name": file.filename,
                 "stored_name": stored_name,
                 "share_token": share_token,
-                "pinned": False
+                "pinned": False,
+                "folder": folder
             })
 
             save_files(files_data)
 
     # ⭐ sort pinned first
     files_data = sorted(files_data, key=lambda x: x.get("pinned", False), reverse=True)
+
     return render_template("index.html", files=files_data)
 
 
@@ -85,7 +88,16 @@ def share_file(token):
     return "Invalid or expired link"
 
 
-# ⭐ PIN / UNPIN
+@app.route("/create_folder", methods=["POST"])
+def create_folder():
+    folder_name = request.form.get("folder_name")
+
+    if folder_name:
+        pass  # will improve later
+
+    return redirect(url_for("home"))
+
+
 @app.route("/pin/<filename>")
 def pin_file(filename):
     files_data = load_files()
