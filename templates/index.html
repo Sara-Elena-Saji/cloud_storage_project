@@ -5,6 +5,14 @@
 </head>
 <body>
 
+    <h2>Folders</h2>
+
+    <a href="/">All</a><br>
+
+    {% for folder in folders %}
+        <a href="/?folder={{ folder }}">{{ folder }}</a><br>
+    {% endfor %}
+
     <h2>Create Folder</h2>
 
     <form method="POST" action="/create_folder">
@@ -26,13 +34,11 @@
         <button type="submit">Upload</button>
     </form>
 
-    <h2>Uploaded Files</h2>
+    <h2>Files ({{ selected_folder }})</h2>
 
     <ul>
         {% for file in files %}
             <li>
-                [{{ file.folder }}]
-
                 {% if file.pinned %}
                     ⭐
                 {% endif %}
@@ -40,6 +46,7 @@
                 <a href="/download/{{ file.stored_name }}">
                     {{ file.original_name }}
                 </a>
+                ({{ file.folder }})
                 |
                 <a href="/delete/{{ file.stored_name }}">Delete</a>
                 |

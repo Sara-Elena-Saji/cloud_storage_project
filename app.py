@@ -29,6 +29,8 @@ def home():
     files_data = data["files"]
     folders = data["folders"]
 
+    selected_folder = request.args.get("folder", "all")
+
     if request.method == "POST":
         file = request.files["file"]
         folder = request.form.get("folder", "default")
@@ -50,9 +52,19 @@ def home():
 
             save_files(data)
 
+    # ⭐ sort pinned first
     files_data = sorted(files_data, key=lambda x: x.get("pinned", False), reverse=True)
 
-    return render_template("index.html", files=files_data, folders=folders)
+    # 📁 FILTER LOGIC
+    if selected_folder != "all":
+        files_data = [f for f in files_data if f.get("folder") == selected_folder]
+
+    return render_template(
+        "index.html",
+        files=files_data,
+        folders=folders,
+        selected_folder=selected_folder
+    )
 
 
 @app.route("/download/<filename>")
