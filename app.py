@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 import os
 import uuid
 import json
@@ -46,10 +46,26 @@ def home():
     return render_template("index.html", files=files_data)
 
 
-# 🔥 DOWNLOAD ROUTE
 @app.route("/download/<filename>")
 def download_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename, as_attachment=True)
+
+
+# 🔥 DELETE ROUTE
+@app.route("/delete/<filename>")
+def delete_file(filename):
+    files_data = load_files()
+
+    # remove file from folder
+    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    # remove from metadata
+    files_data = [f for f in files_data if f["stored_name"] != filename]
+    save_files(files_data)
+
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

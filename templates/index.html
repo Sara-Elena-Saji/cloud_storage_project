@@ -20,6 +20,10 @@
                 <a href="/download/{{ file.stored_name }}">
                     {{ file.original_name }}
                 </a>
+                |
+                <a href="/delete/{{ file.stored_name }}">
+                    Delete
+                </a>
             </li>
         {% endfor %}
     </ul>
