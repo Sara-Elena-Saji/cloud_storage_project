@@ -10,7 +10,13 @@
     <a href="/">All</a><br>
 
     {% for folder in folders %}
-        <a href="/?folder={{ folder }}">{{ folder }}</a><br>
+        <a href="/?folder={{ folder }}">{{ folder }}</a>
+
+        {% if folder != "default" %}
+            | <a href="/delete_folder/{{ folder }}">Delete</a>
+        {% endif %}
+
+        <br>
     {% endfor %}
 
     <h2>Create Folder</h2>

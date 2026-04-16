@@ -5,11 +5,17 @@
             "stored_name": "e77a262a-5f9f-4af6-84a6-d5e1a5d9a469_fake_women_safety_heatmap_data.csv",
             "share_token": "08a3a85b-ea15-4497-91c9-902b592563cd",
             "pinned": false,
-            "folder": "geggeg"
+            "folder": "default"
+        },
+        {
+            "original_name": "GRAFFITI.pptx",
+            "stored_name": "7b0e15ee-097c-438a-94e2-16bc316ab03b_GRAFFITI.pptx",
+            "share_token": "188ef2ae-f42b-4b6f-9dba-510e87ec4cce",
+            "pinned": false,
+            "folder": "default"
         }
     ],
     "folders": [
-        "default",
-        "geggeg"
+        "default"
     ]
 }

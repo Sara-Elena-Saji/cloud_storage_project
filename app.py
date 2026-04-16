@@ -55,7 +55,7 @@ def home():
     # ⭐ sort pinned first
     files_data = sorted(files_data, key=lambda x: x.get("pinned", False), reverse=True)
 
-    # 📁 FILTER LOGIC
+    # 📁 filter
     if selected_folder != "all":
         files_data = [f for f in files_data if f.get("folder") == selected_folder]
 
@@ -111,6 +111,27 @@ def create_folder():
     if folder_name and folder_name not in data["folders"]:
         data["folders"].append(folder_name)
         save_files(data)
+
+    return redirect(url_for("home"))
+
+
+# 🔥 DELETE FOLDER (SAFE)
+@app.route("/delete_folder/<folder_name>")
+def delete_folder(folder_name):
+    data = load_files()
+
+    if folder_name == "default":
+        return redirect(url_for("home"))  # cannot delete default
+
+    # move files to default
+    for file in data["files"]:
+        if file.get("folder") == folder_name:
+            file["folder"] = "default"
+
+    # remove folder
+    data["folders"] = [f for f in data["folders"] if f != folder_name]
+
+    save_files(data)
 
     return redirect(url_for("home"))
 
